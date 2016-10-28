@@ -6,28 +6,26 @@
 // <owner current="true" primary="false">[....]</owner>
 //------------------------------------------------------------------------------
 
-namespace System.Data.SqlClient
+using System;
+using System.ComponentModel;
+using System.Data;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.Diagnostics;
+
+namespace AsyncDataAdapter
 {
-
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Data.Common;
-    using System.Diagnostics;
-
     [
     DefaultEvent("RowUpdated"),
-    ToolboxItem("Microsoft.VSDesigner.Data.VS.SqlDataAdapterToolboxItem, " + AssemblyRef.MicrosoftVSDesigner),
-    Designer("Microsoft.VSDesigner.Data.VS.SqlDataAdapterDesigner, " + AssemblyRef.MicrosoftVSDesigner)
+    // TODO: ToolboxItem("Microsoft.VSDesigner.Data.VS.SqlDataAdapterToolboxItem, " + AssemblyRef.MicrosoftVSDesigner),
+    // TODO: Designer("Microsoft.VSDesigner.Data.VS.SqlDataAdapterDesigner, " + AssemblyRef.MicrosoftVSDesigner)
     ]
-    public sealed class SqlDataAdapter : DbDataAdapter, IDbDataAdapter, ICloneable
+    public sealed class SqlDataAdapter : DbDataAdapter, /*IDbDataAdapter, */ICloneable
     {
 
         static private readonly object EventRowUpdated = new object();
         static private readonly object EventRowUpdating = new object();
-
-        private SqlCommand _deleteCommand, _insertCommand, _selectCommand, _updateCommand;
-
+        
         private SqlCommandSet _commandSet;
         private int _updateBatchSize = 1;
 
@@ -59,57 +57,57 @@ namespace System.Data.SqlClient
 
         [
         DefaultValue(null),
-        Editor("Microsoft.VSDesigner.Data.Design.DBCommandEditor, " + AssemblyRef.MicrosoftVSDesigner, "System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing),
-        ResCategoryAttribute(Res.DataCategory_Update),
-        ResDescriptionAttribute(Res.DbDataAdapter_DeleteCommand),
+        // TODO:  Editor("Microsoft.VSDesigner.Data.Design.DBCommandEditor, " + AssemblyRef.MicrosoftVSDesigner, "System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing),
+        // TODO:  ResCategoryAttribute(Res.DataCategory_Update),
+        // TODO:  ResDescriptionAttribute(Res.DbDataAdapter_DeleteCommand),
         ]
         new public SqlCommand DeleteCommand
         {
-            get { return _deleteCommand; }
-            set { _deleteCommand = value; }
+            get { return (SqlCommand)base.DeleteCommand; }
+            set { base.DeleteCommand = value; }
         }
 
-        IDbCommand IDbDataAdapter.DeleteCommand
-        {
-            get { return _deleteCommand; }
-            set { _deleteCommand = (SqlCommand)value; }
-        }
+        //IDbCommand IDbDataAdapter.DeleteCommand
+        //{
+        //    get { return _deleteCommand; }
+        //    set { _deleteCommand = (SqlCommand)value; }
+        //}
 
         [
         DefaultValue(null),
-        Editor("Microsoft.VSDesigner.Data.Design.DBCommandEditor, " + AssemblyRef.MicrosoftVSDesigner, "System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing),
-        ResCategoryAttribute(Res.DataCategory_Update),
-        ResDescriptionAttribute(Res.DbDataAdapter_InsertCommand),
+        // TODO: Editor("Microsoft.VSDesigner.Data.Design.DBCommandEditor, " + AssemblyRef.MicrosoftVSDesigner, "System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing),
+        // TODO: ResCategoryAttribute(Res.DataCategory_Update),
+        // TODO:  ResDescriptionAttribute(Res.DbDataAdapter_InsertCommand),
         ]
         new public SqlCommand InsertCommand
         {
-            get { return _insertCommand; }
-            set { _insertCommand = value; }
+            get { return (SqlCommand)base.InsertCommand; }
+            set { base.InsertCommand = value; }
         }
 
-        IDbCommand IDbDataAdapter.InsertCommand
-        {
-            get { return _insertCommand; }
-            set { _insertCommand = (SqlCommand)value; }
-        }
+        //IDbCommand IDbDataAdapter.InsertCommand
+        //{
+        //    get { return _insertCommand; }
+        //    set { _insertCommand = (SqlCommand)value; }
+        //}
 
         [
         DefaultValue(null),
-        Editor("Microsoft.VSDesigner.Data.Design.DBCommandEditor, " + AssemblyRef.MicrosoftVSDesigner, "System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing),
-        ResCategoryAttribute(Res.DataCategory_Fill),
-        ResDescriptionAttribute(Res.DbDataAdapter_SelectCommand),
+        // TODO:   Editor("Microsoft.VSDesigner.Data.Design.DBCommandEditor, " + AssemblyRef.MicrosoftVSDesigner, "System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing),
+        // TODO:  ResCategoryAttribute(Res.DataCategory_Fill),
+        // TODO:  ResDescriptionAttribute(Res.DbDataAdapter_SelectCommand),
         ]
         new public SqlCommand SelectCommand
         {
-            get { return _selectCommand; }
-            set { _selectCommand = value; }
+            get { return (SqlCommand)base.SelectCommand; }
+            set { base.SelectCommand = value; }
         }
 
-        IDbCommand IDbDataAdapter.SelectCommand
-        {
-            get { return _selectCommand; }
-            set { _selectCommand = (SqlCommand)value; }
-        }
+        //IDbCommand IDbDataAdapter.SelectCommand
+        //{
+        //    get { return _selectCommand; }
+        //    set { _selectCommand = (SqlCommand)value; }
+        //}
 
 
         override public int UpdateBatchSize
@@ -125,32 +123,32 @@ namespace System.Data.SqlClient
                     throw ADP.ArgumentOutOfRange("UpdateBatchSize");
                 }
                 _updateBatchSize = value;
-                Bid.Trace("<sc.SqlDataAdapter.set_UpdateBatchSize|API> %d#, %d\n", ObjectID, value);
+                // TODO:    Bid.Trace("<sc.SqlDataAdapter.set_UpdateBatchSize|API> %d#, %d\n", ObjectID, value);
             }
         }
 
         [
         DefaultValue(null),
-        Editor("Microsoft.VSDesigner.Data.Design.DBCommandEditor, " + AssemblyRef.MicrosoftVSDesigner, "System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing),
-        ResCategoryAttribute(Res.DataCategory_Update),
-        ResDescriptionAttribute(Res.DbDataAdapter_UpdateCommand),
+        // TODO: Editor("Microsoft.VSDesigner.Data.Design.DBCommandEditor, " + AssemblyRef.MicrosoftVSDesigner, "System.Drawing.Design.UITypeEditor, " + AssemblyRef.SystemDrawing),
+        // TODO:  ResCategoryAttribute(Res.DataCategory_Update),
+        // TODO:  ResDescriptionAttribute(Res.DbDataAdapter_UpdateCommand),
         ]
         new public SqlCommand UpdateCommand
         {
-            get { return _updateCommand; }
-            set { _updateCommand = value; }
+            get { return (SqlCommand)base.UpdateCommand; }
+            set { base.UpdateCommand = value; }
         }
 
-        IDbCommand IDbDataAdapter.UpdateCommand
-        {
-            get { return _updateCommand; }
-            set { _updateCommand = (SqlCommand)value; }
-        }
+        //IDbCommand IDbDataAdapter.UpdateCommand
+        //{
+        //    get { return _updateCommand; }
+        //    set { _updateCommand = (SqlCommand)value; }
+        //}
 
-        [
-        ResCategoryAttribute(Res.DataCategory_Update),
-        ResDescriptionAttribute(Res.DbDataAdapter_RowUpdated),
-        ]
+        // TODO:[
+        // TODO: ResCategoryAttribute(Res.DataCategory_Update),
+        // TODO: ResDescriptionAttribute(Res.DbDataAdapter_RowUpdated),
+        // TODO: ]
         public event SqlRowUpdatedEventHandler RowUpdated
         {
             add
@@ -163,10 +161,10 @@ namespace System.Data.SqlClient
             }
         }
 
-        [
-        ResCategoryAttribute(Res.DataCategory_Update),
-        ResDescriptionAttribute(Res.DbDataAdapter_RowUpdating),
-        ]
+        // TODO: [
+        // TODO: ResCategoryAttribute(Res.DataCategory_Update),
+        // TODO: ResDescriptionAttribute(Res.DbDataAdapter_RowUpdating),
+        // TODO:  ]
         public event SqlRowUpdatingEventHandler RowUpdating
         {
             add
@@ -222,7 +220,7 @@ namespace System.Data.SqlClient
         override protected int ExecuteBatch()
         {
             Debug.Assert(null != _commandSet && (0 < _commandSet.CommandCount), "no commands");
-            Bid.CorrelationTrace("<sc.SqlDataAdapter.ExecuteBatch|Info|Correlation> ObjectID%d#, ActivityID %ls\n", ObjectID);
+            // TODO:    Bid.CorrelationTrace("<sc.SqlDataAdapter.ExecuteBatch|Info|Correlation> ObjectID%d#, ActivityID %ls\n", ObjectID);
             return _commandSet.ExecuteNonQuery();
         }
 
@@ -242,7 +240,7 @@ namespace System.Data.SqlClient
 
         override protected void InitializeBatching()
         {
-            Bid.Trace("<sc.SqlDataAdapter.InitializeBatching|API> %d#\n", ObjectID);
+            // TODO:   Bid.Trace("<sc.SqlDataAdapter.InitializeBatching|API> %d#\n", ObjectID);
             _commandSet = new SqlCommandSet();
             SqlCommand command = SelectCommand;
             if (null == command)

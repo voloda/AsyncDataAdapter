@@ -5,7 +5,9 @@
 // <owner current="true" primary="true">[....]</owner>
 //------------------------------------------------------------------------------
 
-namespace System.Data.ProviderBase
+using System.Threading.Tasks;
+
+namespace AsyncDataAdapter
 {
 
     using System;
@@ -16,7 +18,7 @@ namespace System.Data.ProviderBase
     internal abstract class DataReaderContainer
     {
 
-        protected readonly IDataReader _dataReader;
+        protected readonly DbDataReader _dataReader;
         protected int _fieldCount;
 
         static internal DataReaderContainer Create(IDataReader dataReader, bool returnProviderSpecificTypes)
@@ -35,7 +37,7 @@ namespace System.Data.ProviderBase
         protected DataReaderContainer(IDataReader dataReader)
         {
             Debug.Assert(null != dataReader, "null dataReader");
-            _dataReader = dataReader;
+            _dataReader = (DbDataReader)dataReader;
         }
 
         internal int FieldCount
@@ -63,19 +65,19 @@ namespace System.Data.ProviderBase
         {
             return _dataReader.GetSchemaTable();
         }
-        internal bool NextResult()
+        internal async Task<bool> NextResultAsync()
         {
             _fieldCount = 0;
-            if (_dataReader.NextResult())
+            if (await _dataReader.NextResultAsync())
             {
                 _fieldCount = VisibleFieldCount;
                 return true;
             }
             return false;
         }
-        internal bool Read()
+        internal async Task<bool> ReadAsync()
         {
-            return _dataReader.Read();
+            return await _dataReader.ReadAsync();
         }
 
         private sealed class ProviderSpecificDataReader : DataReaderContainer

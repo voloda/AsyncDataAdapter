@@ -6,7 +6,9 @@
 // <owner current="true" primary="false">[....]</owner>
 //------------------------------------------------------------------------------
 
-namespace System.Data.Common
+using System.Data.Common;
+
+namespace AsyncDataAdapter
 {
 
     using System;

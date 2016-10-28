@@ -5,7 +5,11 @@
 // <owner current="true" primary="true">[....]</owner>
 //------------------------------------------------------------------------------
 
-namespace System.Data.ProviderBase
+using System;
+using System.Data.ProviderBase;
+using System.Threading.Tasks;
+
+namespace AsyncDataAdapter
 {
 
     using System.Collections.Generic;
@@ -133,7 +137,7 @@ namespace System.Data.ProviderBase
             else if (SchemaType.Source == schemaType)
             {
                 mappingAction = System.Data.MissingMappingAction.Passthrough;
-                schemaAction = Data.MissingSchemaAction.Add;
+                schemaAction = MissingSchemaAction.Add;
                 if (!ADP.IsEmpty(sourceTableName))
                 { // MDAC 66034
                     _tableMapping = DataTableMappingCollection.GetTableMappingBySchemaAction(null, sourceTableName, sourceTableName, mappingAction);
@@ -395,17 +399,17 @@ namespace System.Data.ProviderBase
             return _mappedDataValues;
         }
 
-        internal void LoadDataRowWithClear()
+        internal async Task LoadDataRowWithClear()
         {
             // for FillErrorEvent to ensure no values leftover from previous row
             for (int i = 0; i < _readerDataValues.Length; ++i)
             {
                 _readerDataValues[i] = null;
             }
-            LoadDataRow();
+            await LoadDataRow();
         }
 
-        internal void LoadDataRow()
+        internal async Task LoadDataRow()
         {
             try
             {
@@ -432,7 +436,7 @@ namespace System.Data.ProviderBase
                 }
                 if ((null != _chapterMap) && (null != _dataSet))
                 {
-                    LoadDataRowChapters(dataRow); // MDAC 70772
+                    await LoadDataRowChaptersAsync(dataRow); // MDAC 70772
                 }
             }
             finally
@@ -460,7 +464,7 @@ namespace System.Data.ProviderBase
             }
         }
 
-        internal int LoadDataRowChapters(DataRow dataRow)
+        internal async Task<int> LoadDataRowChaptersAsync(DataRow dataRow)
         {
             int datarowadded = 0;
 
@@ -497,7 +501,7 @@ namespace System.Data.ProviderBase
                                 string chapterTableName = _tableMapping.SourceTable + _fieldNames[i]; // MDAC 70908
 
                                 DataReaderContainer readerHandler = DataReaderContainer.Create(nestedReader, _dataReader.ReturnProviderSpecificTypes);
-                                datarowadded += _adapter.FillFromReader(_dataSet, null, chapterTableName, readerHandler, 0, 0, parentChapterColumn, parentChapterValue);
+                                datarowadded += await _adapter.FillFromReaderAsync(_dataSet, null, chapterTableName, readerHandler, 0, 0, parentChapterColumn, parentChapterValue);
                             }
                         }
                     }
@@ -637,7 +641,7 @@ namespace System.Data.ProviderBase
                     DataColumn dataColumn;
                     if (alwaysCreateColumns)
                     {
-                        dataColumn = DataColumnMapping.CreateDataColumnBySchemaAction(_fieldNames[i], _fieldNames[i], _dataTable, fieldType, schemaAction);
+                        dataColumn = Helpers.CreateDataColumnBySchemaAction(_fieldNames[i], _fieldNames[i], _dataTable, fieldType, schemaAction);
                     }
                     else
                     {
@@ -877,7 +881,7 @@ namespace System.Data.ProviderBase
                         // if the column is not mapped and it is a key, then don't add any key information
                         if (schemaRow.IsKey)
                         { // MDAC 90822
-#if DEBUG
+#if DEBUG_OMIT
                             if (AdapterSwitches.DataSchema.TraceVerbose)
                             {
                                 Debug.WriteLine("SetupSchema: partial primary key detected");
@@ -962,7 +966,7 @@ namespace System.Data.ProviderBase
                         }
                         if (4 <= (int)_loadOption)
                         {
-                            if (schemaRow.IsAutoIncrement && DataColumn.IsAutoIncrementType(fieldType))
+                            if (schemaRow.IsAutoIncrement && Helpers.IsAutoIncrementType(fieldType))
                             {
                                 // 
 
@@ -1009,7 +1013,7 @@ namespace System.Data.ProviderBase
                             dataColumn.ReadOnly = schemaRow.IsReadOnly;
                             dataColumn.Unique = schemaRow.IsUnique;
 
-                            if (fieldType == typeof(string) || (fieldType == typeof(SqlTypes.SqlString)))
+                            if (fieldType == typeof(string) || (fieldType == typeof(System.Data.SqlTypes.SqlString)))
                             {
                                 //@devnote:  schemaRow.Size is count of characters for string columns, count of bytes otherwise
                                 dataColumn.MaxLength = schemaRow.Size;
@@ -1043,7 +1047,7 @@ namespace System.Data.ProviderBase
                             keys = new DataColumn[schemaRows.Length];
                         }
                         keys[keyCount++] = dataColumn;
-#if DEBUG
+#if DEBUG_OMIT
                         if (AdapterSwitches.DataSchema.TraceVerbose)
                         {
                             Debug.WriteLine("SetupSchema: building list of " + ((isPrimary) ? "PrimaryKey" : "UniqueConstraint"));
@@ -1053,7 +1057,7 @@ namespace System.Data.ProviderBase
                         // otherwise adding PrimaryKey will change AllowDBNull to false
                         if (isPrimary && dataColumn.AllowDBNull)
                         { // MDAC 72241
-#if DEBUG
+#if DEBUG_OMIT
                             if (AdapterSwitches.DataSchema.TraceVerbose)
                             {
                                 Debug.WriteLine("SetupSchema: changing PrimaryKey into UniqueContraint");
@@ -1116,7 +1120,7 @@ namespace System.Data.ProviderBase
                         // MDAC 66188
                         if (isPrimary)
                         {
-#if DEBUG
+#if DEBUG_OMIT
                             if (AdapterSwitches.DataSchema.TraceVerbose)
                             {
                                 Debug.WriteLine("SetupSchema: set_PrimaryKey");
@@ -1133,7 +1137,7 @@ namespace System.Data.ProviderBase
                             {
                                 if (unique.Equals(constraints[i]))
                                 {
-#if DEBUG
+#if DEBUG_OMIT
                                     if (AdapterSwitches.DataSchema.TraceVerbose)
                                     {
                                         Debug.WriteLine("SetupSchema: duplicate Contraint detected");
@@ -1145,7 +1149,7 @@ namespace System.Data.ProviderBase
                             }
                             if (null != unique)
                             {
-#if DEBUG
+#if DEBUG_OMIT
                                 if (AdapterSwitches.DataSchema.TraceVerbose)
                                 {
                                     Debug.WriteLine("SetupSchema: adding new UniqueConstraint");
