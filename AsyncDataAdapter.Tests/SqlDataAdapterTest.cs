@@ -63,6 +63,155 @@ namespace AsyncDataAdapter.Tests
             }
         }
 
+        [Test]
+        public async Task FillAsyncDataSet()
+        {
+            using (var conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConnectionString;
+                await conn.OpenAsync();
+
+                using (var c = conn.CreateCommand())
+                {
+                    c.CommandText = "GetFast";
+                    c.CommandType = CommandType.StoredProcedure;
+                    c.Parameters.Add("@Number", SqlDbType.Int).Value = 100000;
+
+                    var a = new SqlDataAdapter(c);
+                    var ds = new DataSet();
+                    var r = await a.FillAsync(ds);
+
+                    Assert.AreEqual(1, ds.Tables.Count);
+                    var dt = ds.Tables[0];
+
+                    Assert.AreEqual(900000, r);
+                    Assert.AreEqual(900000, dt.Rows.Count);
+
+                    AssertDataTableContent(dt);
+                }
+            }
+        }
+
+        [Test]
+        public void FillDataSet()
+        {
+            using (var conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConnectionString;
+                conn.Open();
+
+                using (var c = conn.CreateCommand())
+                {
+                    c.CommandText = "GetFast";
+                    c.CommandType = CommandType.StoredProcedure;
+                    c.Parameters.Add("@Number", SqlDbType.Int).Value = 100000;
+
+                    var a = new System.Data.SqlClient.SqlDataAdapter(c);
+                    var ds = new DataSet();
+                    var r = a.Fill(ds);
+
+                    Assert.AreEqual(1, ds.Tables.Count);
+
+                    var dt = ds.Tables[0];
+
+                    Assert.AreEqual(900000, r);
+                    Assert.AreEqual(900000, dt.Rows.Count);
+
+                    AssertDataTableContent(dt);
+                }
+            }
+        }
+        [Test]
+        public async Task FillAsyncDataSetMulti()
+        {
+            using (var conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConnectionString;
+                await conn.OpenAsync();
+
+                using (var c = conn.CreateCommand())
+                {
+                    c.CommandText = "GetMulti";
+                    c.CommandTimeout = 600000;
+                    c.CommandType = CommandType.StoredProcedure;
+                    c.Parameters.Add("@Number1", SqlDbType.Int).Value = 100000;
+                    c.Parameters.Add("@Number2", SqlDbType.Int).Value = 300000;
+                    c.Parameters.Add("@Number3", SqlDbType.Int).Value = 500000;
+
+                    var a = new SqlDataAdapter(c);
+                    var ds = new DataSet();
+                    var r = await a.FillAsync(ds);
+
+                    Assert.AreEqual(8, ds.Tables.Count);
+
+                    var dt = ds.Tables[0];
+
+                    Assert.AreEqual(50000, r);
+                    Assert.AreEqual(50000, dt.Rows.Count);
+
+                    AssertDataTableContent(dt);
+
+                    dt = ds.Tables[6];
+
+                    Assert.AreEqual(50000, dt.Rows.Count);
+
+                    AssertDataTableContent(dt);
+
+                    dt = ds.Tables[7];
+
+                    Assert.AreEqual(50000, dt.Rows.Count);
+
+                    AssertDataTableContent(dt);
+                }
+            }
+        }
+
+
+        [Test]
+        public void FillDataSetMulti()
+        {
+            using (var conn = new SqlConnection())
+            {
+                conn.ConnectionString = ConnectionString;
+                conn.Open();
+
+                using (var c = conn.CreateCommand())
+                {
+                    c.CommandText = "GetMulti";
+                    c.CommandTimeout = 600000;
+                    c.CommandType = CommandType.StoredProcedure;
+                    c.Parameters.Add("@Number1", SqlDbType.Int).Value = 100000;
+                    c.Parameters.Add("@Number2", SqlDbType.Int).Value = 300000;
+                    c.Parameters.Add("@Number3", SqlDbType.Int).Value = 500000;
+
+                    var a = new System.Data.SqlClient.SqlDataAdapter(c);
+                    var ds = new DataSet();
+                    var r = a.Fill(ds);
+
+                    Assert.AreEqual(8, ds.Tables.Count);
+
+                    var dt = ds.Tables[0];
+
+                    Assert.AreEqual(50000, r);
+                    Assert.AreEqual(50000, dt.Rows.Count);
+
+                    AssertDataTableContent(dt);
+
+                    dt = ds.Tables[6];
+
+                    Assert.AreEqual(50000, dt.Rows.Count);
+
+                    AssertDataTableContent(dt);
+
+                    dt = ds.Tables[7];
+
+                    Assert.AreEqual(50000, dt.Rows.Count);
+
+                    AssertDataTableContent(dt);
+                }
+            }
+        }
+
         private void AssertDataTableContent(DataTable dt)
         {
             int i = 1;
