@@ -23,7 +23,7 @@
 
   <Target Name="CreateDb">
     <Exec Command='osql -E -S .\SQL2012SP1 -Q "CREATE DATABASE TestDb"' />
-    <Exec Command='osql -E -S .\SQL2012SP1 -i DbSetup.sql' />
+    <Exec Command='osql -E -S .\SQL2012SP1 -d TestDb -i DbSetup.sql' />
   </Target>
 
   <Target Name="Test" DependsOnTargets="Build">
