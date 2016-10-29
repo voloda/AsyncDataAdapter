@@ -783,7 +783,7 @@ namespace AsyncDataAdapter
             {
                 while (await dataReader.ReadAsync())
                 { // read remaining rows of first and subsequent resultset
-                    mapping.LoadDataRow();
+                    await mapping.LoadDataRow();
                     rowsAddedToDataSet++;
                 }
             }
