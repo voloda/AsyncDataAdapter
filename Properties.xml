@@ -7,6 +7,6 @@
     <DestinationDir Condition="'$(DestinationDir)' == ''">.</DestinationDir>
     <SrcRootDir Condition="'$(SrcRootDir)' == ''">.</SrcRootDir>
     <NUnitTool Condition="'$(NUnitTool)' == ''">nunit-console.exe</NUnitTool>
-    <NugetTool Condition="'$(NugetTool)' == ''">nuget.exe</NugetTool>
+    <NugetTool Condition="'$(NugetTool)' == ''">tools\nuget.exe</NugetTool>
   </PropertyGroup>
 </Project>
