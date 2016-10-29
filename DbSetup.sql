@@ -1,9 +1,11 @@
-﻿SET NOCOUNT ON
+SET NOCOUNT ON
+GO
 
 IF EXISTS(SELECT * FROM sys.tables where name = 'Tab1')
 BEGIN
 	DROP TABLE Tab1
 END
+GO
 
 CREATE TABLE Tab1
 (
@@ -76,7 +78,7 @@ END
 GO
 
 
-
+SET NOCOUNT ON
 
 DECLARE @i INT = 1000000
 DECLARE @d DECIMAL(10,3) = 2.0
@@ -90,3 +92,4 @@ BEGIN
 	SET @f = @f + .1
 	SET @i = @i -1
 END
+GO
