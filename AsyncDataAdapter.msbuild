@@ -1,0 +1,49 @@
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Platform>Any CPU</Platform>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetDirectoryBase>$(Name)-$(BuildNumber)</TargetDirectoryBase>
+
+    <BinaryDirectory>$(TmpDir)\$(TargetDirectoryBase)</BinaryDirectory>
+    <SrcDirectory>$(TmpDir)\$(TargetDirectoryBase)-src</SrcDirectory>
+    <DocDirectory>$(TmpDir)\Doc</DocDirectory>
+
+    
+    <NugetSrcDirectory>$(TmpDir)\nuget</NugetSrcDirectory>
+  </PropertyGroup>
+
+  <Target Name="CI" DependsOnTargets="SetAssemblyVersion;Build">
+    <Exec Command='"$(NUnitTool)" /noshadow /noxml /labels "$(SrcRootDir)\AsyncDataAdapter.Tests\bin\$(Configuration)\AsyncDataAdapter.Tests.dll"' />
+    
+    <CallTarget Targets="NugetPackages" Condition="'$(CreateBinaries)' == 'true'" />
+  </Target>
+
+  <Target Name="Test" DependsOnTargets="Build">
+    <Exec Command='"$(NUnitTool)" /noxml /labels "$(SrcRootDir)\DbKeeperNet.Engine.Tests\bin\$(Configuration)\DbKeeperNet.Engine.Tests.dll" "$(SrcRootDir)\DbKeeperNet.Extensions.AspNetRolesAndMembership.Tests\bin\$(Configuration)\DbKeeperNet.Extensions.AspNetRolesAndMembership.Tests.dll" "$(SrcRootDir)\DbKeeperNet.Engine.Windows.Tests\bin\$(Configuration)\DbKeeperNet.Engine.Windows.Tests.dll"' />
+  </Target>
+  
+  <Target Name="SetAssemblyVersion">
+    <ItemGroup>
+      <AssemblyInfoFiles Include=".\**\AssemblyInfo.cs" />
+    </ItemGroup>
+    <FileUpdate Files="@(AssemblyInfoFiles)" Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)" ReplacementText="$(BuildNumber)" />
+  </Target>
+
+  <Target Name="NugetPackages" DependsOnTargets="Build">
+    <RemoveDir Directories="$(NugetSrcDirectory)" />
+    <ItemGroup>
+      <Nuget Include="AsyncDataAdapter\bin\$(Configuration)\**\AsyncDataAdapter*.dll">
+        <Package>AsyncDataAdapter</Package>
+      </Nuget>
+    </ItemGroup>
+
+    <Copy SourceFiles="@(Nuget)" DestinationFiles="@(Nuget->'$(NugetSrcDirectory)\%(Package)\lib\net45\%(RecursiveDir)%(Filename)%(Extension)')" />
+    <Exec Command="$(NugetTool) pack -Version $(BuildNumber) -BasePath $(NugetSrcDirectory)\%(Nuget.Package) %(Nuget.Package).nuspec" />
+  </Target>
+
+  <Target Name="Build">
+    <Message Text="Build: $(BuildNumber)" />
+    <Exec Command='"$(NugetTool)" restore "$(SrcRootDir)\AsyncDataAdapter.sln"' />
+    <MSBuild Projects="$(SrcRootDir)\AsyncDataAdapter.sln" Properties='Configuration=$(Configuration);Platform=$(Platform)'/>
+  </Target>
+</Project>

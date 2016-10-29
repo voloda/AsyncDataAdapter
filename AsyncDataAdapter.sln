@@ -10,6 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{366B2040-653C-4536-86F6-7A8B8765D6AF}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		AsyncDataAdapter.msbuild = AsyncDataAdapter.msbuild
+		AsyncDataAdapter.nuspec = AsyncDataAdapter.nuspec
 		DbSetup.sql = DbSetup.sql
 		LICENSE = LICENSE
 		README.md = README.md

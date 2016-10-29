@@ -1,0 +1,22 @@
+version: 1.0.{build}
+skip_tags: true
+os: Windows Server 2012
+
+services:
+  - mssql2012sp1
+
+install:
+  - 'ECHO Install: %APPVEYOR_PULL_REQUEST_NUMBER%,%APPVEYOR_REPO_BRANCH%,'
+  - IF "%APPVEYOR_PULL_REQUEST_NUMBER%" == "" IF "%APPVEYOR_REPO_BRANCH%" == "master" SET CreateBinaries=true
+
+configuration: Release
+
+build_script:
+  - ECHO Create databases
+  - 'msbuild.exe AsyncDataAdapter.msbuild /p:BuildNumber=%appveyor_build_version%.1 /t:CI'
+
+artifacts:
+  - path: .\*.nupkg
+    name: NugetPackages
+
+test: off
