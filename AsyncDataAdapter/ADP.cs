@@ -2390,7 +2390,7 @@ namespace AsyncDataAdapter
             return resultString.ToString();
         }
 
-        private static readonly string hexDigits = "0123456789abcdef";
+        // private static readonly string hexDigits = "0123456789abcdef";
 
         //static internal byte[] ByteArrayFromString(string hexString, string dataTypeName)
         //{

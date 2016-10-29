@@ -436,7 +436,7 @@ namespace AsyncDataAdapter
                 try
                 {
                     originalState = await QuietOpenAsync((DbConnection)activeConnection);
-                    using (IDataReader dataReader = command.ExecuteReader(behavior | CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
+                    using (DbDataReader dataReader = (DbDataReader)command.ExecuteReader(behavior | CommandBehavior.SchemaOnly | CommandBehavior.KeyInfo))
                     {
                         if (null != datatable)
                         { // delegate to next set of protected FillSchema methods

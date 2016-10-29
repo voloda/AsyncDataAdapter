@@ -382,7 +382,7 @@ namespace AsyncDataAdapter
             throw ADP.NotSupported();
         }
 
-        virtual protected async Task<DataTable[]> FillSchemaAsync(DataSet dataSet, SchemaType schemaType, string srcTable, IDataReader dataReader)
+        virtual protected async Task<DataTable[]> FillSchemaAsync(DataSet dataSet, SchemaType schemaType, string srcTable, DbDataReader dataReader)
         { // V1.2.3300
             IntPtr hscp;
             Bid.ScopeEnter(out hscp, "<comm.DataAdapter.FillSchema|API> %d#, dataSet, schemaType=%d{ds.SchemaType}, srcTable, dataReader\n", ObjectID, (int)schemaType);
@@ -405,7 +405,7 @@ namespace AsyncDataAdapter
                     throw ADP.FillRequires("dataReader");
                 }
                 // user must Close/Dispose of the dataReader
-                object value = FillSchemaFromReader(dataSet, null, schemaType, srcTable, dataReader);
+                object value = await Task.FromResult(FillSchemaFromReader(dataSet, null, schemaType, srcTable, dataReader));
                 return (DataTable[])value;
             }
             finally
@@ -414,7 +414,7 @@ namespace AsyncDataAdapter
             }
         }
 
-        virtual protected async Task<DataTable> FillSchemaAsync(DataTable dataTable, SchemaType schemaType, IDataReader dataReader)
+        virtual protected async Task<DataTable> FillSchemaAsync(DataTable dataTable, SchemaType schemaType, DbDataReader dataReader)
         { // V1.2.3300
             IntPtr hscp;
             Bid.ScopeEnter(out hscp, "<comm.DataAdapter.FillSchema|API> %d#, dataTable, schemaType, dataReader\n", ObjectID);
@@ -434,7 +434,7 @@ namespace AsyncDataAdapter
                 }
                 // user must Close/Dispose of the dataReader
                 // user will have to call NextResult to access remaining results
-                object value = FillSchemaFromReader(null, dataTable, schemaType, null, dataReader);
+                object value = await FillSchemaFromReader(null, dataTable, schemaType, null, dataReader);
                 return (DataTable)value;
             }
             finally
@@ -443,7 +443,7 @@ namespace AsyncDataAdapter
             }
         }
 
-        internal object FillSchemaFromReader(DataSet dataset, DataTable datatable, SchemaType schemaType, string srcTable, IDataReader dataReader)
+        internal async Task<object> FillSchemaFromReader(DataSet dataset, DataTable datatable, SchemaType schemaType, string srcTable, DbDataReader dataReader)
         {
             DataTable[] dataTables = null;
             int schemaCount = 0;
@@ -481,7 +481,7 @@ namespace AsyncDataAdapter
                         dataTables = DataAdapter.AddDataTableToArray(dataTables, mapping.DataTable);
                     }
                 }
-            } while (dataReader.NextResult()); // FillSchema does not capture errors for FillError event
+            } while (await dataReader.NextResultAsync()); // FillSchema does not capture errors for FillError event
 
             object value = dataTables;
             if ((null == value) && (null == datatable))
@@ -723,7 +723,7 @@ namespace AsyncDataAdapter
                     {
                         try
                         {
-                            mapping.LoadDataRowWithClear();
+                            await mapping.LoadDataRowWithClear();
                             rowsAddedToDataSet++;
                         }
                         catch (Exception e)
@@ -739,7 +739,7 @@ namespace AsyncDataAdapter
                     }
                     else
                     {
-                        mapping.LoadDataRow();
+                        await mapping.LoadDataRow();
                         rowsAddedToDataSet++;
                     }
                 }
@@ -764,7 +764,7 @@ namespace AsyncDataAdapter
                     {
                         // only try-catch if a FillErrorEventHandler is registered so that
                         // in the default case we get the full callstack from users
-                        mapping.LoadDataRowWithClear();
+                        await mapping.LoadDataRowWithClear();
                         rowsAddedToDataSet++;
                     }
                     catch (Exception e)
