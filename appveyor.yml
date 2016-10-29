@@ -13,6 +13,7 @@ configuration: Release
 
 build_script:
   - ECHO Create databases
+  - 'tools\nuget.exe restore AsyncDataAdapter.sln'
   - 'msbuild.exe AsyncDataAdapter.msbuild /p:BuildNumber=%appveyor_build_version%.1 /t:CI'
 
 artifacts:
