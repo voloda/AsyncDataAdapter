@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <Target Name="CI" DependsOnTargets="SetAssemblyVersion;Build;CreateDb">
-    <Exec Command='"$(NUnitTool)" --result=myresults.xml;format=AppVeyor --labels=All "$(SrcRootDir)\AsyncDataAdapter.Tests\bin\$(Configuration)\AsyncDataAdapter.Tests.dll"' />
+    <Exec Command='"$(NUnitTool)" "$(SrcRootDir)\AsyncDataAdapter.Tests\bin\$(Configuration)\AsyncDataAdapter.Tests.dll" --result=myresults.xml;format=AppVeyor --labels=All' />
     
     <CallTarget Targets="NugetPackages" Condition="'$(CreateBinaries)' == 'true'" />
   </Target>
