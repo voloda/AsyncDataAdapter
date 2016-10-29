@@ -1,0 +1,12 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Condition="exists('UserProperties.xml')" Project="UserProperties.xml" />
+  <PropertyGroup>
+    <MSBuildCommunityTasksPath>$(MSBuildProjectDirectory)\packages\MSBuildTasks.1.5.0.214\tools</MSBuildCommunityTasksPath>
+    <Configuration Condition="'$(Configuration)' == ''">Release</Configuration>
+    <TmpDir Condition="'$(TmpDir)' == ''">TMP</TmpDir>
+    <DestinationDir Condition="'$(DestinationDir)' == ''">.</DestinationDir>
+    <SrcRootDir Condition="'$(SrcRootDir)' == ''">.</SrcRootDir>
+    <NUnitTool Condition="'$(NUnitTool)' == ''">nunit-console.exe</NUnitTool>
+    <NugetTool Condition="'$(NugetTool)' == ''">nuget.exe</NugetTool>
+  </PropertyGroup>
+</Project>

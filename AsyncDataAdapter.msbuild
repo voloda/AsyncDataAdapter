@@ -1,4 +1,7 @@
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="Properties.xml" />
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
   <PropertyGroup>
     <Platform>Any CPU</Platform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
