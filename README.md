@@ -4,6 +4,8 @@
 
 Implementation of asynchronous methods on SqlDataAdapter (support for async/await).
 
+The implementation is based on source code provided by Microsoft on GitHub.
+
 ## Info
 
 * Branch ```DotNetSource``` contains original Microsoft .NET sources to simplify resynchronization. Comments contains original sources.
