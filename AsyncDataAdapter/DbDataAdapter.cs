@@ -310,7 +310,7 @@ namespace AsyncDataAdapter
             throw ADP.NotSupported();
         }
 
-        public async Task<DataTable> FillSchema(DataTable dataTable, SchemaType schemaType)
+        public async Task<DataTable> FillSchemaAsync(DataTable dataTable, SchemaType schemaType)
         { // V1.0.3300
             IntPtr hscp;
             Bid.ScopeEnter(out hscp, "<comm.DbDataAdapter.FillSchema|API> %d#, dataTable, schemaType=%d{ds.SchemaType}\n", ObjectID, (int)schemaType);
@@ -498,7 +498,7 @@ namespace AsyncDataAdapter
             }
         }
 
-        public async Task<int> Fill(DataSet dataSet, int startRecord, int maxRecords, string srcTable)
+        public async Task<int> FillAsync(DataSet dataSet, int startRecord, int maxRecords, string srcTable)
         { // V1.0.3300
             IntPtr hscp;
             Bid.ScopeEnter(out hscp, "<comm.DbDataAdapter.Fill|API> %d#, dataSet, startRecord=%d, maxRecords=%d, srcTable='%ls'\n", ObjectID, startRecord, maxRecords, srcTable);
