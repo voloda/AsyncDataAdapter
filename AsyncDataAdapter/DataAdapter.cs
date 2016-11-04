@@ -405,7 +405,7 @@ namespace AsyncDataAdapter
                     throw ADP.FillRequires("dataReader");
                 }
                 // user must Close/Dispose of the dataReader
-                object value = await Task.FromResult(FillSchemaFromReader(dataSet, null, schemaType, srcTable, dataReader));
+                object value = await Task.FromResult(FillSchemaFromReaderAsync(dataSet, null, schemaType, srcTable, dataReader));
                 return (DataTable[])value;
             }
             finally
@@ -434,7 +434,7 @@ namespace AsyncDataAdapter
                 }
                 // user must Close/Dispose of the dataReader
                 // user will have to call NextResult to access remaining results
-                object value = await FillSchemaFromReader(null, dataTable, schemaType, null, dataReader);
+                object value = await FillSchemaFromReaderAsync(null, dataTable, schemaType, null, dataReader);
                 return (DataTable)value;
             }
             finally
@@ -443,7 +443,7 @@ namespace AsyncDataAdapter
             }
         }
 
-        internal async Task<object> FillSchemaFromReader(DataSet dataset, DataTable datatable, SchemaType schemaType, string srcTable, DbDataReader dataReader)
+        internal async Task<object> FillSchemaFromReaderAsync(DataSet dataset, DataTable datatable, SchemaType schemaType, string srcTable, DbDataReader dataReader)
         {
             DataTable[] dataTables = null;
             int schemaCount = 0;
