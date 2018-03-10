@@ -12,8 +12,6 @@ install:
 
 configuration: Release
 
-build: off
-
 build_script:
   - ECHO Create databases
   - 'tools\nuget.exe restore AsyncDataAdapter.sln'
