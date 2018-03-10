@@ -29,9 +29,11 @@ using (var conn = new SqlConnection())
         c.CommandType = CommandType.StoredProcedure;
         c.Parameters.Add("@Number", SqlDbType.Int).Value = 100000;
 
-        var a = new SqlDataAdapter(c);
-        var dt = new DataTable();
-        var r = await a.FillAsync(dt);
+        using(var a = new SqlDataAdapter(c))
+        {
+           var dt = new DataTable();
+           var r = await a.FillAsync(dt);
+        }
     }
 }
 ```
@@ -50,9 +52,11 @@ using (var conn = new SqlConnection())
         c.CommandType = CommandType.StoredProcedure;
         c.Parameters.Add("@Number", SqlDbType.Int).Value = 100000;
 
-        var a = new SqlDataAdapter(c);
-        var ds = new DataSet();
-        var r = await a.FillAsync(ds);
+        using(var a = new SqlDataAdapter(c))
+        {
+           var ds = new DataSet();
+           var r = await a.FillAsync(ds);
+        }
     }
 }
 ```
