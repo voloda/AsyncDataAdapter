@@ -291,7 +291,7 @@ namespace AsyncDataAdapter
         { // V1.0.3300, MDAC 69629
             if (disposing)
             { // release mananged objects
-                IDbDataAdapter pthis = (IDbDataAdapter)this; // must cast to interface to obtain correct value
+                var pthis = this; //(IDbDataAdapter)this; // must cast to interface to obtain correct value
                 pthis.SelectCommand = null;
                 pthis.InsertCommand = null;
                 pthis.UpdateCommand = null;

@@ -26,14 +26,16 @@ namespace AsyncDataAdapter.Tests
                     c.CommandType = CommandType.StoredProcedure;
                     c.Parameters.Add("@Number", SqlDbType.Int).Value = 100000;
 
-                    var a = new SqlDataAdapter(c);
-                    var dt = new DataTable();
-                    var r = await a.FillAsync(dt);
+                    using (var a = new SqlDataAdapter(c))
+                    {
+                        var dt = new DataTable();
+                        var r = await a.FillAsync(dt);
 
-                    Assert.AreEqual(900000, r);
-                    Assert.AreEqual(900000, dt.Rows.Count);
+                        Assert.AreEqual(900000, r);
+                        Assert.AreEqual(900000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
+                    }
                 }
             }
         }
@@ -52,14 +54,16 @@ namespace AsyncDataAdapter.Tests
                     c.CommandType = CommandType.StoredProcedure;
                     c.Parameters.Add("@Number", SqlDbType.Int).Value = 100000;
 
-                    var a = new System.Data.SqlClient.SqlDataAdapter(c);
-                    var dt = new DataTable();
-                    var r = a.Fill(dt);
+                    using (var a = new System.Data.SqlClient.SqlDataAdapter(c))
+                    {
+                        var dt = new DataTable();
+                        var r = a.Fill(dt);
 
-                    Assert.AreEqual(900000, r);
-                    Assert.AreEqual(900000, dt.Rows.Count);
+                        Assert.AreEqual(900000, r);
+                        Assert.AreEqual(900000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
+                    }
                 }
             }
         }
@@ -78,17 +82,19 @@ namespace AsyncDataAdapter.Tests
                     c.CommandType = CommandType.StoredProcedure;
                     c.Parameters.Add("@Number", SqlDbType.Int).Value = 100000;
 
-                    var a = new SqlDataAdapter(c);
-                    var ds = new DataSet();
-                    var r = await a.FillAsync(ds);
+                    using (var a = new SqlDataAdapter(c))
+                    {
+                        var ds = new DataSet();
+                        var r = await a.FillAsync(ds);
 
-                    Assert.AreEqual(1, ds.Tables.Count);
-                    var dt = ds.Tables[0];
+                        Assert.AreEqual(1, ds.Tables.Count);
+                        var dt = ds.Tables[0];
 
-                    Assert.AreEqual(900000, r);
-                    Assert.AreEqual(900000, dt.Rows.Count);
+                        Assert.AreEqual(900000, r);
+                        Assert.AreEqual(900000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
+                    }
                 }
             }
         }
@@ -107,21 +113,24 @@ namespace AsyncDataAdapter.Tests
                     c.CommandType = CommandType.StoredProcedure;
                     c.Parameters.Add("@Number", SqlDbType.Int).Value = 100000;
 
-                    var a = new System.Data.SqlClient.SqlDataAdapter(c);
-                    var ds = new DataSet();
-                    var r = a.Fill(ds);
+                    using (var a = new System.Data.SqlClient.SqlDataAdapter(c))
+                    {
+                        var ds = new DataSet();
+                        var r = a.Fill(ds);
 
-                    Assert.AreEqual(1, ds.Tables.Count);
+                        Assert.AreEqual(1, ds.Tables.Count);
 
-                    var dt = ds.Tables[0];
+                        var dt = ds.Tables[0];
 
-                    Assert.AreEqual(900000, r);
-                    Assert.AreEqual(900000, dt.Rows.Count);
+                        Assert.AreEqual(900000, r);
+                        Assert.AreEqual(900000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
+                    }
                 }
             }
         }
+
         [Test]
         public async Task FillAsyncDataSetMulti()
         {
@@ -139,30 +148,32 @@ namespace AsyncDataAdapter.Tests
                     c.Parameters.Add("@Number2", SqlDbType.Int).Value = 300000;
                     c.Parameters.Add("@Number3", SqlDbType.Int).Value = 500000;
 
-                    var a = new SqlDataAdapter(c);
-                    var ds = new DataSet();
-                    var r = await a.FillAsync(ds);
+                    using (var a = new SqlDataAdapter(c))
+                    {
+                        var ds = new DataSet();
+                        var r = await a.FillAsync(ds);
 
-                    Assert.AreEqual(8, ds.Tables.Count);
+                        Assert.AreEqual(8, ds.Tables.Count);
 
-                    var dt = ds.Tables[0];
+                        var dt = ds.Tables[0];
 
-                    Assert.AreEqual(50000, r);
-                    Assert.AreEqual(50000, dt.Rows.Count);
+                        Assert.AreEqual(50000, r);
+                        Assert.AreEqual(50000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
 
-                    dt = ds.Tables[6];
+                        dt = ds.Tables[6];
 
-                    Assert.AreEqual(50000, dt.Rows.Count);
+                        Assert.AreEqual(50000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
 
-                    dt = ds.Tables[7];
+                        dt = ds.Tables[7];
 
-                    Assert.AreEqual(50000, dt.Rows.Count);
+                        Assert.AreEqual(50000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
+                    }
                 }
             }
         }
@@ -185,30 +196,32 @@ namespace AsyncDataAdapter.Tests
                     c.Parameters.Add("@Number2", SqlDbType.Int).Value = 300000;
                     c.Parameters.Add("@Number3", SqlDbType.Int).Value = 500000;
 
-                    var a = new System.Data.SqlClient.SqlDataAdapter(c);
-                    var ds = new DataSet();
-                    var r = a.Fill(ds);
+                    using (var a = new System.Data.SqlClient.SqlDataAdapter(c))
+                    {
+                        var ds = new DataSet();
+                        var r = a.Fill(ds);
 
-                    Assert.AreEqual(8, ds.Tables.Count);
+                        Assert.AreEqual(8, ds.Tables.Count);
 
-                    var dt = ds.Tables[0];
+                        var dt = ds.Tables[0];
 
-                    Assert.AreEqual(50000, r);
-                    Assert.AreEqual(50000, dt.Rows.Count);
+                        Assert.AreEqual(50000, r);
+                        Assert.AreEqual(50000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
 
-                    dt = ds.Tables[6];
+                        dt = ds.Tables[6];
 
-                    Assert.AreEqual(50000, dt.Rows.Count);
+                        Assert.AreEqual(50000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
 
-                    dt = ds.Tables[7];
+                        dt = ds.Tables[7];
 
-                    Assert.AreEqual(50000, dt.Rows.Count);
+                        Assert.AreEqual(50000, dt.Rows.Count);
 
-                    AssertDataTableContent(dt);
+                        AssertDataTableContent(dt);
+                    }
                 }
             }
         }
@@ -221,20 +234,20 @@ namespace AsyncDataAdapter.Tests
             {
                 var previousRow = dt.Rows[i - 1];
 
-                var flt = (double)previousRow["FltVal"];
-                var dec = (decimal)previousRow["DecVal"];
-                var st = (DateTime)previousRow["StartDate"];
-                var txt = (string)previousRow["Txt"];
+                var flt = (double) previousRow["FltVal"];
+                var dec = (decimal) previousRow["DecVal"];
+                var st = (DateTime) previousRow["StartDate"];
+                var txt = (string) previousRow["Txt"];
 
                 flt += .1f;
-                dec += (decimal).1;
+                dec += (decimal) .1;
 
                 var currentRow = dt.Rows[i];
 
-                var aflt = (double)currentRow["FltVal"];
-                var adec = (decimal)currentRow["DecVal"];
-                var ast = (DateTime)currentRow["StartDate"];
-                var atxt = (string)currentRow["Txt"];
+                var aflt = (double) currentRow["FltVal"];
+                var adec = (decimal) currentRow["DecVal"];
+                var ast = (DateTime) currentRow["StartDate"];
+                var atxt = (string) currentRow["Txt"];
 
                 Assert.AreEqual(flt, aflt, .01);
                 Assert.AreEqual(dec, adec);
@@ -243,7 +256,5 @@ namespace AsyncDataAdapter.Tests
                 i++;
             } while (i < dt.Rows.Count);
         }
-
-
     }
 }
