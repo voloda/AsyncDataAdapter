@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/nk697460b4mpnjrc?svg=true)](https://ci.appveyor.com/project/voloda/asyncdataadapter)
+[![Build status](https://ci.appveyor.com/api/projects/status/bw8gl0fp62vmia15/branch/master?svg=true)](https://ci.appveyor.com/project/voloda/asyncdataadapter/branch/master)
 
 # AsyncDataAdapter
 
