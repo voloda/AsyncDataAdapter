@@ -1,6 +1,7 @@
 version: 1.0.{build}
 skip_tags: true
-os: Windows Server 2012
+image:
+- Visual Studio 2015
 
 services:
   - mssql2012sp1
