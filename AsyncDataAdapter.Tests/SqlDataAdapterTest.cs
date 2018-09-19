@@ -10,7 +10,7 @@ namespace AsyncDataAdapter.Tests
     public class SqlDataAdapterTest
     {
         // private const string ConnectionString = @"server=.\sqlexpress;database=TestDb;Trusted_Connection=Yes";
-        private const string ConnectionString = @"server=.\SQL2012SP1;database=TestDb;Trusted_Connection=Yes";
+        private const string ConnectionString = @"server=.\SQL2017;database=TestDb;Trusted_Connection=Yes";
 
         [Test]
         public async Task FillAsyncDataTable()

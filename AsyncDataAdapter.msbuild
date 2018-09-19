@@ -17,13 +17,11 @@
 
   <Target Name="CI" DependsOnTargets="SetAssemblyVersion;Build;CreateDb">
     <Exec Command='"$(NUnitTool)" "$(SrcRootDir)\AsyncDataAdapter.Tests\bin\$(Configuration)\AsyncDataAdapter.Tests.dll" --result=myresults.xml;format=AppVeyor --labels=All' />
-    
-    <CallTarget Targets="NugetPackages" Condition="'$(CreateBinaries)' == 'true'" />
   </Target>
 
   <Target Name="CreateDb">
-    <Exec Command='osql -E -S .\SQL2012SP1 -Q "CREATE DATABASE TestDb"' />
-    <Exec Command='osql -E -S .\SQL2012SP1 -d TestDb -i DbSetup.sql' />
+    <Exec Command='osql -E -S .\SQL2017 -Q "CREATE DATABASE TestDb"' />
+    <Exec Command='osql -E -S .\SQL2017 -d TestDb -i DbSetup.sql' />
   </Target>
 
   <Target Name="Test" DependsOnTargets="Build">
@@ -33,20 +31,10 @@
   <Target Name="SetAssemblyVersion">
     <ItemGroup>
       <AssemblyInfoFiles Include=".\**\AssemblyInfo.cs" />
+      <AssemblyProjectFiles Include=".\**\*.csproj" />
     </ItemGroup>
-    <FileUpdate Files="@(AssemblyInfoFiles)" Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)" ReplacementText="$(BuildNumber)" />
-  </Target>
-
-  <Target Name="NugetPackages" DependsOnTargets="Build">
-    <RemoveDir Directories="$(NugetSrcDirectory)" />
-    <ItemGroup>
-      <Nuget Include="AsyncDataAdapter\bin\$(Configuration)\**\AsyncDataAdapter*.dll">
-        <Package>AsyncDataAdapter</Package>
-      </Nuget>
-    </ItemGroup>
-
-    <Copy SourceFiles="@(Nuget)" DestinationFiles="@(Nuget->'$(NugetSrcDirectory)\%(Package)\lib\net45\%(RecursiveDir)%(Filename)%(Extension)')" />
-    <Exec Command="$(NugetTool) pack -Version $(BuildNumber) -BasePath $(NugetSrcDirectory)\%(Nuget.Package) %(Nuget.Package).nuspec" />
+    <FileUpdate Files="@(AssemblyInfoFiles)" Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)" ReplacementText="$(BuildNumber).0" />
+    <FileUpdate Files="@(AssemblyProjectFiles)" Regex="(\d+)\.(\d+)\.(\d+)" ReplacementText="$(BuildNumber)" />
   </Target>
 
   <Target Name="Build">

@@ -19,10 +19,6 @@ namespace AsyncDataAdapter
     using System.ComponentModel;
     using System.Configuration;
     using System.Data;
-    using System.Data.ProviderBase;
-    using System.Data.Odbc;
-    using System.Data.OleDb;
-    using System.Data.Sql;
     using System.Data.SqlTypes;
     using System.Diagnostics;
     using System.Globalization;
@@ -33,7 +29,6 @@ namespace AsyncDataAdapter
     using System.Runtime.Serialization;
     using System.Security;
     using System.Security.Permissions;
-    using System.Data.SqlClient;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
@@ -192,18 +187,18 @@ namespace AsyncDataAdapter
             TraceExceptionAsReturnValue(e);
             return e;
         }
-        static internal ConfigurationException Configuration(string message)
-        {
-            ConfigurationException e = new ConfigurationErrorsException(message);
-            TraceExceptionAsReturnValue(e);
-            return e;
-        }
-        static internal ConfigurationException Configuration(string message, XmlNode node)
-        {
-            ConfigurationException e = new ConfigurationErrorsException(message, node);
-            TraceExceptionAsReturnValue(e);
-            return e;
-        }
+        //static internal ConfigurationException Configuration(string message)
+        //{
+        //    ConfigurationException e = new ConfigurationErrorsException(message);
+        //    TraceExceptionAsReturnValue(e);
+        //    return e;
+        //}
+        //static internal ConfigurationException Configuration(string message, XmlNode node)
+        //{
+        //    ConfigurationException e = new ConfigurationErrorsException(message, node);
+        //    TraceExceptionAsReturnValue(e);
+        //    return e;
+        //}
         static internal DataException Data(string message)
         {
             DataException e = new DataException(message);
@@ -709,19 +704,19 @@ namespace AsyncDataAdapter
             return InvalidEnumerationValue(typeof(ParameterDirection), (int)value);
         }
 
-        static internal ArgumentOutOfRangeException InvalidPermissionState(PermissionState value)
-        {
-#if DEBUG
-            switch (value)
-            {
-                case PermissionState.Unrestricted:
-                case PermissionState.None:
-                    Debug.Assert(false, "valid PermissionState " + value.ToString());
-                    break;
-            }
-#endif
-            return InvalidEnumerationValue(typeof(PermissionState), (int)value);
-        }
+//        static internal ArgumentOutOfRangeException InvalidPermissionState(PermissionState value)
+//        {
+//#if DEBUG
+//            switch (value)
+//            {
+//                case PermissionState.Unrestricted:
+//                case PermissionState.None:
+//                    Debug.Assert(false, "valid PermissionState " + value.ToString());
+//                    break;
+//            }
+//#endif
+//            return InvalidEnumerationValue(typeof(PermissionState), (int)value);
+//        }
 
         static internal ArgumentOutOfRangeException InvalidRule(Rule value)
         {
@@ -816,25 +811,25 @@ namespace AsyncDataAdapter
             return NotSupportedEnumerationValue(typeof(StatementType), value.ToString(), method);
         }
 
-        static internal ArgumentOutOfRangeException InvalidUserDefinedTypeSerializationFormat(Microsoft.SqlServer.Server.Format value)
-        {
-#if DEBUG
-            switch (value)
-            {
-                case Microsoft.SqlServer.Server.Format.Unknown:
-                case Microsoft.SqlServer.Server.Format.Native:
-                case Microsoft.SqlServer.Server.Format.UserDefined:
-                    Debug.Assert(false, "valid UserDefinedTypeSerializationFormat " + value.ToString());
-                    break;
-            }
-#endif
-            return InvalidEnumerationValue(typeof(Microsoft.SqlServer.Server.Format), (int)value);
-        }
+//        static internal ArgumentOutOfRangeException InvalidUserDefinedTypeSerializationFormat(Microsoft.SqlServer.Server.Format value)
+//        {
+//#if DEBUG
+//            switch (value)
+//            {
+//                case Microsoft.SqlServer.Server.Format.Unknown:
+//                case Microsoft.SqlServer.Server.Format.Native:
+//                case Microsoft.SqlServer.Server.Format.UserDefined:
+//                    Debug.Assert(false, "valid UserDefinedTypeSerializationFormat " + value.ToString());
+//                    break;
+//            }
+//#endif
+//            return InvalidEnumerationValue(typeof(Microsoft.SqlServer.Server.Format), (int)value);
+//        }
 
-        static internal ArgumentOutOfRangeException NotSupportedUserDefinedTypeSerializationFormat(Microsoft.SqlServer.Server.Format value, string method)
-        {
-            return ADP.NotSupportedEnumerationValue(typeof(Microsoft.SqlServer.Server.Format), value.ToString(), method);
-        }
+//        static internal ArgumentOutOfRangeException NotSupportedUserDefinedTypeSerializationFormat(Microsoft.SqlServer.Server.Format value, string method)
+//        {
+//            return ADP.NotSupportedEnumerationValue(typeof(Microsoft.SqlServer.Server.Format), value.ToString(), method);
+//        }
 
         //
         // DbProviderFactories
@@ -2360,13 +2355,13 @@ namespace AsyncDataAdapter
             return result;
         }
 
-        [EnvironmentPermission(SecurityAction.Assert, Read = "COMPUTERNAME")]
-        static internal string MachineName()
-        {
-            // Note: In Longhorn you'll be able to rename a machine without
-            // rebooting.  Therefore, don't cache this machine name.
-            return Environment.MachineName;
-        }
+        //[EnvironmentPermission(SecurityAction.Assert, Read = "COMPUTERNAME")]
+        //static internal string MachineName()
+        //{
+        //    // Note: In Longhorn you'll be able to rename a machine without
+        //    // rebooting.  Therefore, don't cache this machine name.
+        //    return Environment.MachineName;
+        //}
 
         static internal string BuildQuotedString(string quotePrefix, string quoteSuffix, string unQuotedString)
         {
@@ -2469,13 +2464,13 @@ namespace AsyncDataAdapter
         //    return returnString;
         //}
 
-        [FileIOPermission(SecurityAction.Assert, AllFiles = FileIOPermissionAccess.PathDiscovery)]
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
-        static internal string GetFullPath(string filename)
-        { // MDAC 77686
-            return Path.GetFullPath(filename);
-        }
+        //[FileIOPermission(SecurityAction.Assert, AllFiles = FileIOPermissionAccess.PathDiscovery)]
+        //[ResourceExposure(ResourceScope.Machine)]
+        //[ResourceConsumption(ResourceScope.Machine)]
+        //static internal string GetFullPath(string filename)
+        //{ // MDAC 77686
+        //    return Path.GetFullPath(filename);
+        //}
 
         // 
         //static internal string GetComputerNameDnsFullyQualified()
@@ -2519,35 +2514,35 @@ namespace AsyncDataAdapter
 
 
         // SxS: the file is opened in FileShare.Read mode allowing several threads/apps to read it simultaneously
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
-        static internal Stream GetFileStream(string filename)
-        {
-            (new FileIOPermission(FileIOPermissionAccess.Read, filename)).Assert();
-            try
-            {
-                return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
-            }
-            finally
-            {
-                FileIOPermission.RevertAssert();
-            }
-        }
+        //[ResourceExposure(ResourceScope.Machine)]
+        //[ResourceConsumption(ResourceScope.Machine)]
+        //static internal Stream GetFileStream(string filename)
+        //{
+        //    (new FileIOPermission(FileIOPermissionAccess.Read, filename)).Assert();
+        //    try
+        //    {
+        //        return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
+        //    }
+        //    finally
+        //    {
+        //        FileIOPermission.RevertAssert();
+        //    }
+        //}
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
-        static internal FileVersionInfo GetVersionInfo(string filename)
-        {
-            (new FileIOPermission(FileIOPermissionAccess.Read, filename)).Assert(); // MDAC 62038
-            try
-            {
-                return FileVersionInfo.GetVersionInfo(filename); // MDAC 60411
-            }
-            finally
-            {
-                FileIOPermission.RevertAssert();
-            }
-        }
+        //[ResourceExposure(ResourceScope.Machine)]
+        //[ResourceConsumption(ResourceScope.Machine)]
+        //static internal FileVersionInfo GetVersionInfo(string filename)
+        //{
+        //    (new FileIOPermission(FileIOPermissionAccess.Read, filename)).Assert(); // MDAC 62038
+        //    try
+        //    {
+        //        return FileVersionInfo.GetVersionInfo(filename); // MDAC 60411
+        //    }
+        //    finally
+        //    {
+        //        FileIOPermission.RevertAssert();
+        //    }
+        //}
 
         //[ResourceExposure(ResourceScope.Machine)]
         //[ResourceConsumption(ResourceScope.Machine)]
@@ -2606,55 +2601,55 @@ namespace AsyncDataAdapter
 
         //}
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
-        static internal object ClassesRootRegistryValue(string subkey, string queryvalue)
-        { // MDAC 77697
-            (new RegistryPermission(RegistryPermissionAccess.Read, "HKEY_CLASSES_ROOT\\" + subkey)).Assert(); // MDAC 62028
-            try
-            {
-                using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(subkey, false))
-                {
-                    return ((null != key) ? key.GetValue(queryvalue) : null);
-                }
-            }
-            catch (SecurityException e)
-            {
-                // Even though we assert permission - it's possible there are
-                // ACL's on registry that cause SecurityException to be thrown.
-                ADP.TraceExceptionWithoutRethrow(e);
-                return null;
-            }
-            finally
-            {
-                RegistryPermission.RevertAssert();
-            }
-        }
+        //[ResourceExposure(ResourceScope.Machine)]
+        //[ResourceConsumption(ResourceScope.Machine)]
+        //static internal object ClassesRootRegistryValue(string subkey, string queryvalue)
+        //{ // MDAC 77697
+        //    (new RegistryPermission(RegistryPermissionAccess.Read, "HKEY_CLASSES_ROOT\\" + subkey)).Assert(); // MDAC 62028
+        //    try
+        //    {
+        //        using (RegistryKey key = Registry.ClassesRoot.OpenSubKey(subkey, false))
+        //        {
+        //            return ((null != key) ? key.GetValue(queryvalue) : null);
+        //        }
+        //    }
+        //    catch (SecurityException e)
+        //    {
+        //        // Even though we assert permission - it's possible there are
+        //        // ACL's on registry that cause SecurityException to be thrown.
+        //        ADP.TraceExceptionWithoutRethrow(e);
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        RegistryPermission.RevertAssert();
+        //    }
+        //}
 
-        [ResourceExposure(ResourceScope.Machine)]
-        [ResourceConsumption(ResourceScope.Machine)]
-        static internal object LocalMachineRegistryValue(string subkey, string queryvalue)
-        { // MDAC 77697
-            (new RegistryPermission(RegistryPermissionAccess.Read, "HKEY_LOCAL_MACHINE\\" + subkey)).Assert(); // MDAC 62028
-            try
-            {
-                using (RegistryKey key = Registry.LocalMachine.OpenSubKey(subkey, false))
-                {
-                    return ((null != key) ? key.GetValue(queryvalue) : null);
-                }
-            }
-            catch (SecurityException e)
-            {
-                // Even though we assert permission - it's possible there are
-                // ACL's on registry that cause SecurityException to be thrown.
-                ADP.TraceExceptionWithoutRethrow(e);
-                return null;
-            }
-            finally
-            {
-                RegistryPermission.RevertAssert();
-            }
-        }
+        //[ResourceExposure(ResourceScope.Machine)]
+        //[ResourceConsumption(ResourceScope.Machine)]
+        //static internal object LocalMachineRegistryValue(string subkey, string queryvalue)
+        //{ // MDAC 77697
+        //    (new RegistryPermission(RegistryPermissionAccess.Read, "HKEY_LOCAL_MACHINE\\" + subkey)).Assert(); // MDAC 62028
+        //    try
+        //    {
+        //        using (RegistryKey key = Registry.LocalMachine.OpenSubKey(subkey, false))
+        //        {
+        //            return ((null != key) ? key.GetValue(queryvalue) : null);
+        //        }
+        //    }
+        //    catch (SecurityException e)
+        //    {
+        //        // Even though we assert permission - it's possible there are
+        //        // ACL's on registry that cause SecurityException to be thrown.
+        //        ADP.TraceExceptionWithoutRethrow(e);
+        //        return null;
+        //    }
+        //    finally
+        //    {
+        //        RegistryPermission.RevertAssert();
+        //    }
+        //}
 
         // SxS: although this method uses registry, it does not expose anything out
         //[ResourceExposure(ResourceScope.None)]
@@ -2999,8 +2994,9 @@ namespace AsyncDataAdapter
             {
                 return true;
             }
-            INullable nullable = (value as INullable);
-            return ((null != nullable) && nullable.IsNull);
+
+            var nullable = value as INullable;
+            return ((nullable != null) && nullable.IsNull);
         }
 
         //static internal void IsNullOrSqlType(object value, out bool isNull, out bool isSqlType)

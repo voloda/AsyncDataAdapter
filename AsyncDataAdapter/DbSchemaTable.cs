@@ -13,7 +13,6 @@ namespace AsyncDataAdapter
 
     using System;
     using System.Data;
-    using System.Data.ProviderBase;
     using System.Diagnostics;
 
     sealed internal class DbSchemaTable

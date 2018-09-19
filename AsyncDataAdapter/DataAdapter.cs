@@ -15,7 +15,6 @@ namespace AsyncDataAdapter
     using System;
     using System.ComponentModel;
     using System.Data;
-    using System.Data.ProviderBase;
     using System.Diagnostics;
     using System.Globalization;
     using System.Threading;
@@ -331,7 +330,7 @@ namespace AsyncDataAdapter
         }
 
         [Obsolete("CloneInternals() has been deprecated.  Use the DataAdapter(DataAdapter from) constructor.  http://go.microsoft.com/fwlink/?linkid=14202")] // V1.1.3300, MDAC 81448
-        [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")] // MDAC 82936
+        // [System.Security.Permissions.PermissionSetAttribute(System.Security.Permissions.SecurityAction.Demand, Name = "FullTrust")] // MDAC 82936
         virtual protected DataAdapter CloneInternals()
         { // V1.0.3300
             DataAdapter clone = (DataAdapter)Activator.CreateInstance(GetType(), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, null, null, CultureInfo.InvariantCulture, null);
@@ -405,7 +404,7 @@ namespace AsyncDataAdapter
                     throw ADP.FillRequires("dataReader");
                 }
                 // user must Close/Dispose of the dataReader
-                object value = await Task.FromResult(FillSchemaFromReaderAsync(dataSet, null, schemaType, srcTable, dataReader));
+                object value = await FillSchemaFromReaderAsync(dataSet, null, schemaType, srcTable, dataReader);
                 return (DataTable[])value;
             }
             finally

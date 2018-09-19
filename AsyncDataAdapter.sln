@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2019
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncDataAdapter", "AsyncDataAdapter\AsyncDataAdapter.csproj", "{0384745D-0E1D-4F87-A24E-2CF5762FAAB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsyncDataAdapter", "AsyncDataAdapter\AsyncDataAdapter.csproj", "{0384745D-0E1D-4F87-A24E-2CF5762FAAB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsyncDataAdapter.Tests", "AsyncDataAdapter.Tests\AsyncDataAdapter.Tests.csproj", "{34B7E6F3-858A-489B-BDD0-45CC6EB62551}"
 EndProject
@@ -12,7 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		appveyor.yml = appveyor.yml
 		AsyncDataAdapter.msbuild = AsyncDataAdapter.msbuild
-		AsyncDataAdapter.nuspec = AsyncDataAdapter.nuspec
 		DbSetup.sql = DbSetup.sql
 		LICENSE = LICENSE
 		Properties.xml = Properties.xml
@@ -36,5 +35,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ABB37006-C016-409A-88C0-B3E06924773D}
 	EndGlobalSection
 EndGlobal

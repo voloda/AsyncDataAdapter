@@ -6,7 +6,6 @@
 //------------------------------------------------------------------------------
 
 using System;
-using System.Data.ProviderBase;
 using System.Threading.Tasks;
 
 namespace AsyncDataAdapter

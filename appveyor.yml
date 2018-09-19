@@ -1,10 +1,10 @@
-version: 1.0.{build}
+version: 2.0.{build}
 skip_tags: true
 image:
-- Visual Studio 2015
+- Visual Studio 2017
 
 services:
-  - mssql2012sp1
+  - mssql2017
 
 install:
   - 'ECHO Install: %APPVEYOR_PULL_REQUEST_NUMBER%,%APPVEYOR_REPO_BRANCH%,'
@@ -14,11 +14,11 @@ configuration: Release
 
 build_script:
   - ECHO Create databases
-  - 'tools\nuget.exe restore AsyncDataAdapter.sln'
-  - 'msbuild.exe AsyncDataAdapter.msbuild /p:BuildNumber=%appveyor_build_version%.1 /t:CI'
+  - 'nuget.exe restore AsyncDataAdapter.sln'
+  - 'msbuild.exe AsyncDataAdapter.msbuild /p:BuildNumber=%appveyor_build_version% /t:CI'
 
 artifacts:
-  - path: .\*.nupkg
+  - path: .\AsyncDataAdapter\**\*.nupkg
     name: NugetPackages
 
 test: off
